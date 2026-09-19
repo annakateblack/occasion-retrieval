@@ -1,0 +1,80 @@
+# ---------------------------------------------------------------------------
+# PRIVATE DATA — never commit
+# See docs/DATA_HANDLING.md for the full policy and the reasoning behind it.
+# ---------------------------------------------------------------------------
+
+# Secrets and connection strings
+.env
+.env.*
+!.env.example
+
+# Personal data snapshots: save-app saves, Instagram export, downloaded images.
+# Everything under data/local is personal. Nothing here is ever committed.
+data/local/*
+!data/local/.gitkeep
+
+# Private engineering notes: source endpoint details, vendor specifics,
+# anything not yet cleared for publication.
+docs/private/*
+!docs/private/.gitkeep
+
+# Private tooling: snapshot producers that touch a live account.
+tools/private/*
+!tools/private/.gitkeep
+
+# Raw Instagram export in any form
+**/instagram_export/
+**/saved_posts.json
+**/saved_collections.json
+
+# Taste snapshots in any form
+**/taste_snapshot*.json
+**/taste_snapshot*.jsonl
+
+# Any downloaded media
+**/images/
+*.jpg
+*.jpeg
+*.png
+*.webp
+!docs/assets/*.png
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# ---------------------------------------------------------------------------
+# Node / frontend (Phase 8)
+# ---------------------------------------------------------------------------
+node_modules/
+.next/
+out/
+.vercel/
+
+# ---------------------------------------------------------------------------
+# Notebooks
+# ---------------------------------------------------------------------------
+.ipynb_checkpoints/
+notebooks/**/*.ipynb
+
+# ---------------------------------------------------------------------------
+# Editors / OS
+# ---------------------------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
