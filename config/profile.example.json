@@ -1,0 +1,80 @@
+{
+  "profile_id": "example",
+  "version": 1,
+  "_comment": "FICTIONAL example profile with invented sizes. A real profile is personal data and belongs in data/local/profile.json, which is gitignored.",
+  "dress_sizes": {
+    "ideal_numeric": [
+      8
+    ],
+    "workable_numeric": [
+      6,
+      10
+    ],
+    "unlikely_numeric": [
+      2,
+      14
+    ],
+    "ideal_alpha": [
+      "M"
+    ],
+    "workable_alpha": [
+      "S",
+      "L"
+    ],
+    "unlikely_alpha": [
+      "XXS",
+      "XXL"
+    ]
+  },
+  "top_sizes": {
+    "ideal_alpha": [
+      "M"
+    ],
+    "workable_alpha": [
+      "L"
+    ],
+    "unlikely_alpha": [
+      "XXS"
+    ]
+  },
+  "bottom_sizes": {
+    "ideal_alpha": [
+      "L"
+    ],
+    "workable_alpha": [
+      "M"
+    ],
+    "unlikely_alpha": [
+      "XXS"
+    ]
+  },
+  "height_inches_min": 62,
+  "height_inches_max": 64,
+  "height_note": "Displayed next to length; not scored in V1.",
+  "style": {
+    "preferred_necklines": [
+      "plunge_v",
+      "asymmetric",
+      "cowl",
+      "sweetheart",
+      "open_back"
+    ],
+    "lower_preference_necklines": [
+      "straight_strapless",
+      "high_neck"
+    ],
+    "preferred_silhouettes": [
+      "flowing",
+      "slip",
+      "wrap"
+    ],
+    "lower_preference_silhouettes": [
+      "structured"
+    ],
+    "construction_notes": [
+      "Prefers necklines with shape or asymmetry over straight-across cuts.",
+      "Prefers bodices that hold their line without structured bust support.",
+      "Prefers silhouettes with movement over rigid straight cuts."
+    ]
+  }
+}

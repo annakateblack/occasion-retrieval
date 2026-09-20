@@ -1,0 +1,15 @@
+{
+  "name": "My Tie",
+  "event_types": ["date_night", "cocktail"],
+  "event_date": "2026-09-26",
+  "vibe_text": "bright fun elevated late-summer, avoid heavy wintery styles",
+  "vibe_tags": [],
+  "length_preference": { "mini": 1.0, "midi": 0.65, "maxi": 0.2, "unknown": 0.5 },
+  "price_rule": {
+    "max_rental_price_cents": 10000,
+    "applies_to_lengths": ["mini", "midi"],
+    "is_hard_filter": true
+  },
+  "exclude_unavailable_on_date": true,
+  "allow_unknown_availability": true
+}

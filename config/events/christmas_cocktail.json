@@ -1,0 +1,15 @@
+{
+  "name": "Christmas Cocktail",
+  "event_types": ["date_night", "cocktail"],
+  "event_date": "2026-12-12",
+  "vibe_text": "holiday red green metallic sparkle, colder weather styling, long sleeve is a plus",
+  "vibe_tags": ["holiday", "long_sleeve_bonus"],
+  "length_preference": { "mini": 1.0, "midi": 0.7, "maxi": 0.35, "unknown": 0.5 },
+  "price_rule": {
+    "max_rental_price_cents": 10000,
+    "applies_to_lengths": ["mini"],
+    "is_hard_filter": true
+  },
+  "exclude_unavailable_on_date": true,
+  "allow_unknown_availability": true
+}

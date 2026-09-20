@@ -1,0 +1,11 @@
+{
+  "name": "Spring Formal",
+  "event_types": ["formal"],
+  "event_date": "2027-04-10",
+  "vibe_text": "elevated romantic, floor length preferred",
+  "vibe_tags": [],
+  "length_preference": { "mini": 0.3, "midi": 0.6, "maxi": 1.0, "unknown": 0.5 },
+  "price_rule": { "max_rental_price_cents": null, "applies_to_lengths": [], "is_hard_filter": false },
+  "exclude_unavailable_on_date": true,
+  "allow_unknown_availability": true
+}
