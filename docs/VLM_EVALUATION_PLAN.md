@@ -78,6 +78,11 @@ Use graded relevance:
 - 1 = weak but possible
 - 0 = bad fit
 
+**Open decision before labeling:** `DECISIONS.md` currently locks a 0/1/2
+scale, while this plan describes 0/1/2/3. The metric implementation accepts
+either non-negative graded scale, but a single scale must be selected before
+human labels are produced or compared.
+
 Primary metric: **nDCG@10**.
 
 Secondary diagnostics:
@@ -86,6 +91,10 @@ Secondary diagnostics:
 - fraction of top-10 results with usable style evidence
 - hard-filter survivor count
 - ranking ties at the cutoff
+
+Tie diagnostics require retaining at least one result below the reporting
+cutoff. An evaluation run truncated to exactly 10 cannot establish whether
+rank 10 is tied with rank 11.
 
 ## Success criteria
 

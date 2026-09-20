@@ -19,8 +19,12 @@ PUBLIC-SAFE. Logic only.
 
 from __future__ import annotations
 
-from rental_retrieval.retrieval import attributes as attr
 from rental_retrieval.retrieval import filters, scoring
+from rental_retrieval.retrieval.attribute_provider import (
+    AttributeProvider,
+    caption_resolution,
+    validate_ranking_contract,
+)
 from rental_retrieval.retrieval.vibe import resolve_event_tags, unknown_tags
 from rental_retrieval.schemas.event import EventContext
 from rental_retrieval.schemas.instagram import InstagramSavedPost
@@ -119,8 +123,15 @@ def rank(
     event: EventContext,
     top_k: int = 10,
     quality_threshold: float = QUALITY_THRESHOLD,
+    attribute_provider: AttributeProvider | None = None,
 ) -> RankingRun:
-    """Rank a dress inventory for one event and one profile."""
+    """Rank a dress inventory for one event and one profile.
+
+    The default path is the byte-stable caption-only baseline.  A caller may
+    supply a provider that returns the same resolved values plus provenance;
+    scoring weights and hard-filter logic remain unchanged for a controlled
+    caption-vs-vision comparison.
+    """
     prepared, notes = prepare_event(event)
 
     rejected: dict[str, int] = {}
@@ -129,7 +140,11 @@ def rank(
 
     for post in inventory:
         caption = post.raw_caption
-        a = attr.extract_all(caption)
+        resolution = (
+            attribute_provider(post) if attribute_provider is not None else caption_resolution(post)
+        )
+        validate_ranking_contract(resolution)
+        a = resolution.values
         length = a["length"] or "unknown"
         availability = a["availability"] or "unknown"
         numeric, alpha = _sizes_from(post)
@@ -166,9 +181,15 @@ def rank(
             flags.append("length not stated")
         if any(w.startswith("rental_price_inferred") for w in post.parse_warnings):
             flags.append("price inferred from the only amount in the caption")
+        if resolution.conflicts:
+            flags.append(f"{len(resolution.conflicts)} attribute conflict(s) require review")
 
         band, _ = profile.size_band(numeric, alpha)
         by_name = {c.name: c for c in components}
+        availability_observations = resolution.observations.get("availability", [])
+        availability_note = (
+            availability_observations[0].evidence if availability_observations else None
+        )
 
         row = RankedDress(
             rank=0,
@@ -182,8 +203,13 @@ def rank(
             size_summary=_size_summary(numeric, alpha, post.raw_size_text),
             size_band=band,
             availability_status=availability,  # type: ignore[arg-type]
-            availability_note=a["availability_evidence"],
+            availability_note=availability_note,
             attributes={k: v for k, v in a.items() if not k.endswith("_evidence")},
+            attribute_provenance={
+                key: [observation.model_dump() for observation in observations]
+                for key, observations in resolution.observations.items()
+            },
+            attribute_conflicts=resolution.conflicts,
             hard_filters=filter_results,
             passed_hard_filters=True,
             fit_score=by_name["fit"].score,

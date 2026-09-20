@@ -4,7 +4,8 @@ A retrieval and ranking system that recommends rental dresses from student-run
 Instagram inventory, personalized to a taste profile learned from a user's saved
 products rather than from self-description.
 
-**Status: Phase 0.** Architecture, schema, and source validation. No pipeline yet.
+**Status:** Deterministic caption baseline complete; provider-neutral visual
+enrichment and evaluation integration are prepared on an experimental branch.
 
 ## The problem, stated as a systems problem
 
@@ -90,6 +91,8 @@ sampled by account, not by post.
 | [REPO_STRUCTURE.md](docs/REPO_STRUCTURE.md) | Layout and public/private boundaries |
 | [DATA_HANDLING.md](docs/DATA_HANDLING.md) | What may never be committed |
 | [PHASE_0_CHECKLIST.md](docs/PHASE_0_CHECKLIST.md) | Current phase exit criteria |
+| [VLM_EVALUATION_PLAN.md](docs/VLM_EVALUATION_PLAN.md) | Controlled caption-vs-vision experiment |
+| [VLM_INTEGRATION_NOTES.md](docs/VLM_INTEGRATION_NOTES.md) | Incoming implementation handoff and conflicts |
 
 ## Setup
 

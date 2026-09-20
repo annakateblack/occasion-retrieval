@@ -112,6 +112,8 @@ class RankedDress(BaseModel):
 
     # Attributes the caption actually supported, unknowns preserved
     attributes: dict[str, str | None] = Field(default_factory=dict)
+    attribute_provenance: dict[str, list[dict]] = Field(default_factory=dict)
+    attribute_conflicts: list[str] = Field(default_factory=list)
 
     # Filters and scores
     hard_filters: list[HardFilterResult] = Field(default_factory=list)

@@ -18,12 +18,15 @@ rental-retrieval/
 │   │   ├── 0001-source-adapter-architecture.md
 │   │   ├── 0002-storage-and-vector-search.md
 │   │   ├── 0003-taste-model-sequencing.md
-│   │   └── 0004-orchestration-boundary.md
+│   │   ├── 0004-orchestration-boundary.md
+│   │   ├── 0005-deterministic-baseline-before-vision.md
+│   │   └── 0006-provider-neutral-visual-enrichment.md
 │   ├── DECISIONS.md              [public]  locked / reversible / pending register
 │   ├── DATA_HANDLING.md          [public]  what may never be committed, and why
 │   ├── PHASE_0_CHECKLIST.md      [public]  pass/fail exit criteria
 │   ├── REPO_STRUCTURE.md         [public]  this file
-│   ├── EVALUATION.md             [public]  Phase 5: methodology and results
+│   ├── VLM_EVALUATION_PLAN.md    [public]  controlled experiment and gates
+│   ├── VLM_INTEGRATION_NOTES.md  [public]  provider handoff and conflict register
 │   ├── assets/                   [public]  diagrams
 │   └── private/                  [private] endpoint behavior, vendor specifics,
 │                                           field-coverage measurements
@@ -33,16 +36,17 @@ rental-retrieval/
 │   └── migrations/               [public]  numbered forward migrations
 │
 ├── src/rental_retrieval/         [public]  ALL business logic lives here
-│   ├── schemas/                            normalized ingestion contract (ADR 001)
-│   │   └── raw.py
+│   ├── schemas/                            normalized ingestion and output contracts
+│   │   ├── raw.py
+│   │   └── enrichment.py                  provider-neutral visual observations
 │   ├── sources/                            one adapter per source; pure, no network I/O
 │   │   ├── taste_source.py                 (Phase 1a)
 │   │   ├── ig_export.py                    (Phase 1b)
 │   │   ├── ig_oembed.py                    (Phase 1b)
 │   │   └── manual.py                       (Phase 1b)
-│   ├── extraction/                         VLM attributes + canonical text (Phase 3)
-│   ├── retrieval/                          filter, vector search, fusion, rank (Phase 4+)
-│   └── eval/                               metrics and ablation harness (Phase 5)
+│   ├── extraction/                         future provider implementation
+│   ├── retrieval/                          deterministic filters, scoring, rank + provider seam
+│   └── eval/                               provider-neutral metrics + private-label loader
 │
 ├── tools/
 │   └── private/                  [private] snapshot producers that touch a live
