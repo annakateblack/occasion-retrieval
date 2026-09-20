@@ -34,6 +34,13 @@ data/local/derived/*
 !data/local/derived/.gitkeep
 **/ig_*_report.txt
 **/ig_*.jsonl
+**/ranking_*.json
+**/ranking_*.txt
+
+# Real fit profile is personal data; only config/profile.example.json is committed
+data/local/profile.json
+profile.json
+!config/profile.example.json
 
 # Taste snapshots in any form
 **/taste_snapshot*.json
