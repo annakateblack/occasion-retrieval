@@ -22,5 +22,6 @@ def load_private_judgments(path: Path, *, repo_root: Path) -> QueryJudgments:
     judgments = QueryJudgments.model_validate(payload)
     if not judgments.is_measured:
         raise ValueError("Private human labels must set is_measured=true")
+    if judgments.relevance_scale_max is None:
+        raise ValueError("Private human labels must declare relevance_scale_max as 2 or 3")
     return judgments
-

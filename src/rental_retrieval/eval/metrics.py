@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import math
 from collections.abc import Iterable, Mapping, Sequence
+from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from rental_retrieval.schemas.ranking import RankingRun
 
@@ -20,10 +21,40 @@ class QueryJudgments(BaseModel):
 
     query_id: str
     labels: dict[str, int]
+    relevance_scale_max: Literal[2, 3] | None = Field(
+        default=None,
+        description=(
+            "Declared maximum grade. Required for measured labels while the repository's "
+            "0..2 versus 0..3 decision remains unresolved."
+        ),
+    )
     is_measured: bool = Field(
         default=False,
         description="False for synthetic/stub labels; true only for private human labels",
     )
+
+    @model_validator(mode="after")
+    def validate_scale(self) -> QueryJudgments:
+        if any(grade < 0 for grade in self.labels.values()):
+            raise ValueError("Relevance grades must be non-negative")
+        if self.relevance_scale_max is not None and any(
+            grade > self.relevance_scale_max for grade in self.labels.values()
+        ):
+            raise ValueError("Relevance grade exceeds declared scale maximum")
+        return self
+
+
+class CutoffTieDiagnostics(BaseModel):
+    """Tie-group evidence at a reporting cutoff.
+
+    ``tie_count`` is the number visible in the retained rows. It is a lower
+    bound until a retained row below the cutoff has a different score.
+    """
+
+    cutoff_score: float | None
+    tie_count: int
+    row_below_cutoff_retained: bool
+    tie_group_complete: bool
 
 
 class ArmMetrics(BaseModel):
@@ -34,6 +65,17 @@ class ArmMetrics(BaseModel):
     hard_filter_survivors: int
     boundary_tie_count: int
     cutoff_was_observable: bool
+    boundary_tie_count_is_complete: bool
+
+
+class ArmComparisonMetrics(BaseModel):
+    """Provider-neutral metrics for one controlled caption/enriched pair."""
+
+    query_id: str
+    caption_only: ArmMetrics
+    enriched: ArmMetrics
+    top_k_overlap: float
+    hard_filter_survivor_delta: int
 
 
 def dcg(relevances: Sequence[int], k: int = 10) -> float:
@@ -78,28 +120,86 @@ def boundary_ties(scores: Sequence[float], k: int = 10) -> tuple[int, bool]:
     rows, the count is only a lower bound because a tied item may have been
     truncated by the ranker.
     """
+    diagnostic = cutoff_tie_diagnostics(scores, k)
+    return diagnostic.tie_count, diagnostic.row_below_cutoff_retained
+
+
+def cutoff_tie_diagnostics(scores: Sequence[float], k: int = 10) -> CutoffTieDiagnostics:
+    """Return a conservative tie diagnostic for rank ``k``.
+
+    Scores must be in ranking order. Retaining rank ``k + 1`` makes the cutoff
+    observable, but the count is complete only once the retained rows cross the
+    end of the tie group.
+    """
     if k <= 0:
         raise ValueError("k must be positive")
     if len(scores) < k:
-        return 0, True
+        return CutoffTieDiagnostics(
+            cutoff_score=None,
+            tie_count=0,
+            row_below_cutoff_retained=False,
+            tie_group_complete=True,
+        )
+
     cutoff = scores[k - 1]
     tied = sum(math.isclose(score, cutoff, rel_tol=0.0, abs_tol=1e-12) for score in scores)
-    return tied, len(scores) > k
+    row_below = len(scores) > k
+    crossed_tie_boundary = row_below and not math.isclose(
+        scores[-1], cutoff, rel_tol=0.0, abs_tol=1e-12
+    )
+    return CutoffTieDiagnostics(
+        cutoff_score=cutoff,
+        tie_count=tied,
+        row_below_cutoff_retained=row_below,
+        tie_group_complete=crossed_tie_boundary,
+    )
 
 
 def evaluate_run(run: RankingRun, judgments: QueryJudgments,
                  fields: Sequence[str], k: int = 10) -> ArmMetrics:
-    ids = [row.shortcode for row in run.results]
-    tie_count, observable = boundary_ties([row.overall_score for row in run.results], k)
+    reported_rows = run.results[:k]
+    ids = [row.shortcode for row in reported_rows]
+    tie = cutoff_tie_diagnostics([row.overall_score for row in run.results], k)
     return ArmMetrics(
         query_id=judgments.query_id,
         ndcg_at_k=ndcg_at_k(ids, judgments.labels, k),
-        attribute_coverage=field_coverage((row.attributes for row in run.results), fields),
+        attribute_coverage=field_coverage((row.attributes for row in reported_rows), fields),
         style_score_evaluability=(
-            sum(row.style_score is not None for row in run.results) / len(run.results)
-            if run.results else 0.0
+            sum(row.style_score is not None for row in reported_rows) / len(reported_rows)
+            if reported_rows else 0.0
         ),
         hard_filter_survivors=run.passed_hard_filters,
-        boundary_tie_count=tie_count,
-        cutoff_was_observable=observable,
+        boundary_tie_count=tie.tie_count,
+        cutoff_was_observable=tie.row_below_cutoff_retained,
+        boundary_tie_count_is_complete=tie.tie_group_complete,
+    )
+
+
+def evaluate_arm_pair(
+    caption_only: RankingRun,
+    enriched: RankingRun,
+    judgments: QueryJudgments,
+    fields: Sequence[str],
+    k: int = 10,
+) -> ArmComparisonMetrics:
+    """Evaluate two already-controlled runs without importing provider code."""
+    if caption_only.total_candidates != enriched.total_candidates:
+        raise ValueError("Evaluation arms must use the same candidate count")
+    if caption_only.weights != enriched.weights:
+        raise ValueError("Evaluation arms must use identical ranking weights")
+
+    caption_metrics = evaluate_run(caption_only, judgments, fields, k)
+    enriched_metrics = evaluate_run(enriched, judgments, fields, k)
+    return ArmComparisonMetrics(
+        query_id=judgments.query_id,
+        caption_only=caption_metrics,
+        enriched=enriched_metrics,
+        top_k_overlap=top_k_overlap(
+            [row.shortcode for row in caption_only.results],
+            [row.shortcode for row in enriched.results],
+            k,
+        ),
+        hard_filter_survivor_delta=(
+            enriched.passed_hard_filters - caption_only.passed_hard_filters
+        ),
     )

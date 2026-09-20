@@ -8,10 +8,13 @@ from pathlib import Path
 
 import pytest
 
+from rental_retrieval.eval.experiment import ControlledArmSettings, run_controlled_arms
 from rental_retrieval.eval.io import load_private_judgments
 from rental_retrieval.eval.metrics import (
     QueryJudgments,
     boundary_ties,
+    cutoff_tie_diagnostics,
+    evaluate_arm_pair,
     field_coverage,
     ndcg_at_k,
     top_k_overlap,
@@ -106,6 +109,17 @@ def test_boundary_ties_require_a_row_below_cutoff():
     assert observable is False
 
 
+def test_cutoff_tie_count_is_lower_bound_when_retained_rows_end_in_tie():
+    diagnostic = cutoff_tie_diagnostics([0.9, 0.8, 0.8], k=2)
+    assert diagnostic.row_below_cutoff_retained is True
+    assert diagnostic.tie_count == 2
+    assert diagnostic.tie_group_complete is False
+
+    complete = cutoff_tie_diagnostics([0.9, 0.8, 0.8, 0.7], k=2)
+    assert complete.tie_count == 2
+    assert complete.tie_group_complete is True
+
+
 def test_private_loader_rejects_labels_outside_local_eval(tmp_path: Path):
     public = tmp_path / "tests" / "labels.json"
     public.parent.mkdir()
@@ -126,6 +140,28 @@ def test_private_loader_requires_measured_flag(tmp_path: Path):
     )
     with pytest.raises(ValueError, match="is_measured=true"):
         load_private_judgments(target, repo_root=tmp_path)
+
+
+def test_private_loader_requires_declared_relevance_scale(tmp_path: Path):
+    target = tmp_path / "data" / "local" / "eval" / "labels.json"
+    target.parent.mkdir(parents=True)
+    target.write_text(
+        QueryJudgments(
+            query_id="synthetic", labels={"A": 2}, is_measured=True
+        ).model_dump_json(),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="relevance_scale_max"):
+        load_private_judgments(target, repo_root=tmp_path)
+
+
+def test_declared_relevance_scale_rejects_out_of_range_grade():
+    with pytest.raises(ValueError, match="exceeds declared scale"):
+        QueryJudgments(
+            query_id="synthetic",
+            labels={"A": 3},
+            relevance_scale_max=2,
+        )
 
 
 def test_enriched_provider_uses_same_ranker(profile):
@@ -159,3 +195,49 @@ def test_provider_missing_ranker_fields_fails_fast(profile):
             [post], profile, date_night_event(),
             attribute_provider=lambda _: AttributeResolution(values={"length": "mini"}),
         )
+
+
+def test_controlled_arms_share_ranker_settings_and_retain_below_cutoff(profile):
+    posts = [
+        make_post(f"ITEM{i:02d}", "mini dress size 4 $45", numeric=[4])
+        for i in range(12)
+    ]
+
+    def provider(candidate):
+        resolution = caption_resolution(candidate)
+        resolution.values["neckline"] = "cowl"
+        return resolution
+
+    settings = ControlledArmSettings(
+        reporting_k=10,
+        retained_depth=12,
+        quality_threshold=0.0,
+    )
+    arms = run_controlled_arms(posts, profile, date_night_event(), provider, settings)
+
+    assert arms.settings == settings
+    assert arms.caption_only.total_candidates == arms.enriched.total_candidates == 12
+    assert arms.caption_only.weights == arms.enriched.weights
+    assert arms.caption_only.passed_hard_filters == arms.enriched.passed_hard_filters == 12
+    assert arms.caption_only.returned == arms.enriched.returned == settings.retained_depth
+    assert arms.caption_only.results[0].style_score is None
+    assert arms.enriched.results[0].style_score == 1.0
+
+    judgments = QueryJudgments(
+        query_id="synthetic",
+        labels={post.shortcode: 2 for post in posts},
+        relevance_scale_max=2,
+    )
+    comparison = evaluate_arm_pair(
+        arms.caption_only,
+        arms.enriched,
+        judgments,
+        fields=["neckline"],
+        k=settings.reporting_k,
+    )
+    assert comparison.top_k_overlap == 1.0
+    assert comparison.hard_filter_survivor_delta == 0
+    assert comparison.caption_only.attribute_coverage["neckline"] == 0.0
+    assert comparison.enriched.attribute_coverage["neckline"] == 1.0
+    assert comparison.caption_only.style_score_evaluability == 0.0
+    assert comparison.enriched.style_score_evaluability == 1.0

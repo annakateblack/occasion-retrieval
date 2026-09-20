@@ -37,6 +37,13 @@ data/local/derived/*
 **/ranking_*.json
 **/ranking_*.txt
 
+# Defense in depth: real model caches and relevance labels remain private even
+# if a provider is accidentally configured outside data/local/.
+**/enrichment_cache/
+**/vlm_cache/
+**/image_enrichment_cache/
+**/relevance_labels*.json
+
 # Real fit profile is personal data; only config/profile.example.json is committed
 data/local/profile.json
 profile.json

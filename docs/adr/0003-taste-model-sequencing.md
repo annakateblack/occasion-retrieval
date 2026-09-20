@@ -4,6 +4,12 @@
 - **Date:** 2026-09-19
 - **Deciders:** Anna Kate Black
 
+> **Sequencing note (ADR 005):** ADR 005 later inserted a deterministic
+> personalized baseline and a controlled visual-attribute enrichment experiment
+> before the top-5 NN taste model. That experiment keeps the same ranker and is
+> not the VLM reranking rejected/deferred here. ADR 005 supersedes the step
+> numbers below; this ADR still governs taste-model sequencing.
+
 ## Context
 
 The system must score an arbitrary rental dress against the user's learned taste. The available supervision is a corpus of saved products from a fashion save app: **positives only**, no negatives, no ratings, no record of what was rejected. This is a positive-unlabeled setting.

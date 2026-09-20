@@ -81,7 +81,9 @@ Use graded relevance:
 **Open decision before labeling:** `DECISIONS.md` currently locks a 0/1/2
 scale, while this plan describes 0/1/2/3. The metric implementation accepts
 either non-negative graded scale, but a single scale must be selected before
-human labels are produced or compared.
+human labels are produced or compared. Every measured label file must declare
+`relevance_scale_max` as `2` or `3`; declaring the scale records the decision
+but does not make it.
 
 Primary metric: **nDCG@10**.
 
@@ -92,9 +94,10 @@ Secondary diagnostics:
 - hard-filter survivor count
 - ranking ties at the cutoff
 
-Tie diagnostics require retaining at least one result below the reporting
-cutoff. An evaluation run truncated to exactly 10 cannot establish whether
-rank 10 is tied with rank 11.
+Tie diagnostics require retaining results below the reporting cutoff. An
+evaluation run truncated to exactly 10 cannot establish whether rank 10 is tied
+with rank 11. If the last retained row is still tied with rank 10, the reported
+tie count is a lower bound; retain more rows until the score changes.
 
 ## Success criteria
 

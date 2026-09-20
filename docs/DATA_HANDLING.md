@@ -48,6 +48,8 @@ data/local/
 ├── taste_snapshot_2026-09-19.json     taste corpus, dated, append-only
 ├── instagram_export/                   unpacked Meta export
 ├── oembed_cache/                       one JSON per permalink, cached forever
+├── enrichment/                         private images and model-response caches
+├── eval/                               real relevance labels and private run outputs
 └── images/                             any downloaded media
 ```
 
@@ -58,6 +60,12 @@ requires.
 The oEmbed cache is permanent by design. A permalink is resolved once and never
 re-requested. This is both a courtesy to the platform and a correctness property:
 cached responses make evaluation runs reproducible.
+
+Image-enrichment caches may contain model-derived descriptions of private images,
+permalinks, shortcodes, usernames, or captions. Real caches therefore stay under
+`data/local/enrichment/` even when the raw image bytes are stored elsewhere.
+Real relevance labels and row-level evaluation outputs stay under
+`data/local/eval/`. Only aggregate, non-identifying metrics may leave those paths.
 
 ## The `docs/private/` boundary
 
