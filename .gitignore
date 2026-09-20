@@ -27,6 +27,14 @@ tools/private/*
 **/saved_posts.json
 **/saved_collections.json
 
+# Instagram export inputs and derived output (added in the ingestion step)
+data/local/instagram/*
+!data/local/instagram/.gitkeep
+data/local/derived/*
+!data/local/derived/.gitkeep
+**/ig_*_report.txt
+**/ig_*.jsonl
+
 # Taste snapshots in any form
 **/taste_snapshot*.json
 **/taste_snapshot*.jsonl

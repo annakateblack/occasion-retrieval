@@ -1,0 +1,43 @@
+[
+  {
+    "timestamp": 1730800000,
+    "media": [],
+    "fbid": "SYNTH_POST_0001",
+    "label_values": [
+      {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA001/", "href": "https://www.instagram.com/p/SYNTHAAA001/"},
+      {"label": "Caption", "value": "Sparkle mini available to rent!"},
+      {"label": "Title", "value": ""},
+      {"label": null, "title": "Hashtags", "dict": []},
+      {"label": null, "title": "Owner", "dict": [
+        {"title": "", "dict": [{"label": "Username", "value": "sample_rental_01"}]}
+      ]},
+      {"label": null, "title": "Brand partner", "dict": []}
+    ]
+  },
+  {
+    "timestamp": 1730900000,
+    "media": [],
+    "fbid": "SYNTH_POST_0002",
+    "label_values": [
+      {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA002/", "href": "https://www.instagram.com/p/SYNTHAAA002/"},
+      {"label": "Caption", "value": "renting this gown"},
+      {"label": "Title", "value": ""},
+      {"label": null, "title": "Owner", "dict": [
+        {"title": "", "dict": [{"label": "Username", "value": "sample_rental_01"}]}
+      ]}
+    ]
+  },
+  {
+    "timestamp": 1731000000,
+    "media": [],
+    "fbid": "SYNTH_POST_0003",
+    "label_values": [
+      {"label": "URL", "value": "https://www.instagram.com/p/SYNTHZZZ999/", "href": "https://www.instagram.com/p/SYNTHZZZ999/"},
+      {"label": "Caption", "value": "a saved post that is not in any collection we care about"},
+      {"label": "Title", "value": ""},
+      {"label": null, "title": "Owner", "dict": [
+        {"title": "", "dict": [{"label": "Username", "value": "sample_other_01"}]}
+      ]}
+    ]
+  }
+]

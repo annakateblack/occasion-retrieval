@@ -1,0 +1,124 @@
+[
+  {
+    "timestamp": 1694655774,
+    "media": [],
+    "fbid": "SYNTH_COLLECTION_0001",
+    "label_values": [
+      {"label": "Name", "value": "Shop"},
+      {"label": "Type", "value": "Default"},
+      {"label": "Privacy", "value": "Collaborative"},
+      {"label": "Update time", "value": "2024-01-01T00:00:00+00:00"},
+      {"label": null, "title": "Media", "dict": [
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA001/", "href": "https://www.instagram.com/p/SYNTHAAA001/"},
+          {"label": "Caption", "value": "Sparkle mini available to rent! Size 4 â\u0080¢ $45 to rent â\u0080¢ dry clean before return. DM to claim"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Hashtags", "dict": []},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [
+              {"label": "URL", "value": "https://www.instagram.com/sample_rental_01/"},
+              {"label": "Name", "value": "Sample Rentals One"},
+              {"label": "Username", "value": "sample_rental_01"}
+            ]}
+          ]},
+          {"label": null, "title": "Brand partner", "dict": []}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA002/", "href": "https://www.instagram.com/p/SYNTHAAA002/"},
+          {"label": "Caption", "value": "renting this gown, sizes 2-4, $60 rental, retails for $395. dry cleaning included"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Hashtags", "dict": []},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [
+              {"label": "Name", "value": "Sample Rentals One"},
+              {"label": "Username", "value": "sample_rental_01"}
+            ]}
+          ]},
+          {"label": null, "title": "Brand partner", "dict": []}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA003/", "href": "https://www.instagram.com/p/SYNTHAAA003/"},
+          {"label": "Caption", "value": "obsessed with this dress from my fall haul, linking everything in my stories"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Hashtags", "dict": []},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [
+              {"label": "Name", "value": "Sample Style Blog"},
+              {"label": "Username", "value": "sample_styleblog"}
+            ]}
+          ]},
+          {"label": null, "title": "Brand partner", "dict": []}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA004/", "href": "https://www.instagram.com/p/SYNTHAAA004/"},
+          {"label": "Caption", "value": "navy two piece set still up for grabs, size small"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Hashtags", "dict": []},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [
+              {"label": "Name", "value": "Sample Rentals One"},
+              {"label": "Username", "value": "sample_rental_01"}
+            ]}
+          ]},
+          {"label": null, "title": "Brand partner", "dict": []}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA005/", "href": "https://www.instagram.com/p/SYNTHAAA005/"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Hashtags", "dict": []},
+          {"label": null, "title": "Owner", "dict": [{"title": "", "dict": []}]},
+          {"label": null, "title": "Brand partner", "dict": []}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA001/", "href": "https://www.instagram.com/p/SYNTHAAA001/?utm_source=ig_web"},
+          {"label": "Caption", "value": "duplicate of the first post, different query string"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [{"label": "Username", "value": "sample_rental_01"}]}
+          ]}
+        ]},
+        {"title": "", "dict": [
+          {"label": "Caption", "value": "a record with no URL at all, which must be dropped"},
+          {"label": "Title", "value": ""}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHAAA006/", "href": "https://www.instagram.com/p/SYNTHAAA006/"},
+          {"label": "Caption", "value": "rent this dress! $50 to rent, retails for $300"},
+          {"label": "Caption", "value": "rent this dress! $50 to rent, retails for $300"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [{"label": "Username", "value": "sample_rental_02"}]}
+          ]}
+        ]},
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/reel/SYNTHAAA007/", "href": "https://www.instagram.com/reel/SYNTHAAA007/"},
+          {"label": "Caption", "value": "styling three ways, $40 and $250 mentioned with no context at all"},
+          {"label": "Title", "value": ""},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [{"label": "Username", "value": "sample_rental_02"}]}
+          ]}
+        ]}
+      ]}
+    ]
+  },
+  {
+    "timestamp": 1694655774,
+    "media": [],
+    "fbid": "SYNTH_COLLECTION_0002",
+    "label_values": [
+      {"label": "Name", "value": "Recipes "},
+      {"label": "Type", "value": "Default"},
+      {"label": "Privacy", "value": "Private"},
+      {"label": "Update time", "value": "2024-01-01T00:00:00+00:00"},
+      {"label": null, "title": "Media", "dict": [
+        {"title": "", "dict": [
+          {"label": "URL", "value": "https://www.instagram.com/p/SYNTHBBB001/", "href": "https://www.instagram.com/p/SYNTHBBB001/"},
+          {"label": "Caption", "value": "one pot pasta recipe"},
+          {"label": null, "title": "Owner", "dict": [
+            {"title": "", "dict": [{"label": "Username", "value": "sample_food_01"}]}
+          ]}
+        ]}
+      ]}
+    ]
+  }
+]
