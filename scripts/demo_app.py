@@ -140,29 +140,29 @@ def page(query: str, run, image_root: Path, enriched_count: int) -> str:
             else "Caption-only demo mode")
     return f"""<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Occasion</title>
+<title>Anna Kate's Dress Search</title>
 <style>
-:root{{--bg:#f6f4ef;--ink:#18302c;--muted:#65716c;--card:#fff;--accent:#173f37;--line:#ddd9d0}}
+:root{{--bg:#fff7fa;--ink:#4a2f39;--muted:#8f7480;--card:#ffffff;--accent:#d98fa5;--accent-dark:#b96983;--line:#f0dfe6;--chip:#fbeef3;--placeholder:#f7e9ee}}
 *{{box-sizing:border-box}} body{{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}}
-.shell{{max-width:1180px;margin:auto;padding:42px 24px 80px}}
-.brand{{font-family:Georgia,serif;font-size:44px;letter-spacing:-1px;margin:0}}
-.sub{{color:var(--muted);max-width:700px;margin:8px 0 26px;line-height:1.5}}
+.shell{{max-width:1180px;margin:auto;padding:48px 24px 80px}}
+.brand{{font-family:Georgia,serif;font-size:48px;letter-spacing:-1.2px;margin:0;color:#8f4f67}}
+.sub{{color:var(--muted);max-width:760px;margin:10px 0 28px;line-height:1.5;font-size:17px}}
 form{{display:flex;gap:10px;max-width:900px;margin-bottom:12px}}
-input{{flex:1;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:white;font-size:16px}}
-button,.button{{background:var(--accent);color:white;border:0;border-radius:12px;padding:15px 18px;font-weight:650;text-decoration:none;display:inline-block;cursor:pointer}}
+input{{flex:1;padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:white;font-size:16px;box-shadow:0 6px 22px rgba(185,105,131,.08)}}
+button,.button{{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:white;border:0;border-radius:14px;padding:15px 20px;font-weight:700;text-decoration:none;display:inline-block;cursor:pointer;box-shadow:0 8px 20px rgba(185,105,131,.18)}}
 .meta{{color:var(--muted);font-size:13px;margin-bottom:26px}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}}
-.card{{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(28,46,39,.06)}}
-.visual{{height:260px;background:#e8e4dc;display:flex;align-items:center;justify-content:center}}
-.visual img{{width:100%;height:100%;object-fit:cover}} .placeholder{{font-size:54px;color:#9a9489}}
+.card{{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 12px 32px rgba(185,105,131,.10)}}
+.visual{{height:270px;background:var(--placeholder);display:flex;align-items:center;justify-content:center}}
+.visual img{{width:100%;height:100%;object-fit:cover}} .placeholder{{font-size:54px;color:#d7aabd;width:100%;height:100%;align-items:center;justify-content:center}}
 .content{{padding:18px}} .eyebrow{{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}}
 h2{{font-family:Georgia,serif;font-size:24px;margin:8px 0}} .score{{margin:7px 0 12px}}
-.chips{{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}} .chips span{{font-size:12px;background:#eef1ee;padding:6px 8px;border-radius:999px}}
+.chips{{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}} .chips span{{font-size:12px;background:var(--chip);padding:6px 8px;border-radius:999px;color:#7f5365}}
 p{{line-height:1.45}} .flags{{color:#8a5c3c;font-size:13px}}
 @media(max-width:650px){{form{{flex-direction:column}}.brand{{font-size:36px}}}}
 </style></head><body><main class="shell">
-<h1 class="brand">Occasion</h1>
-<p class="sub">Describe what you need. The existing retrieval engine turns the request into a structured event and ranks your local rental inventory.</p>
+<h1 class="brand">Anna Kate&#39;s Dress Search</h1>
+<p class="sub">Finding a date is hard enough, so finding a dress should be the least stressful part.</p>
 <form method="get"><input name="q" value="{html.escape(query, quote=True)}" placeholder="I need a My Tie dress for spring under $100"><button type="submit">Find dresses</button></form>
 <div class="meta">{html.escape(run.event_name)} · {run.total_candidates} candidates · {run.returned} shown · {html.escape(note)}</div>
 <section class="grid">{cards}</section>
