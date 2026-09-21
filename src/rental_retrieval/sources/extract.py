@@ -85,7 +85,7 @@ def _canon_alpha(token: str) -> str:
 
 # --- Price -------------------------------------------------------------------
 
-_MONEY = re.compile(r"\$\s?(\d{1,4}(?:\.\d{2})?)")
+_MONEY = re.compile(r"(?:\\$\\s?(\\d{1,4}(?:\\.\\d{2})?)|(\\d{1,4}(?:\\.\\d{2})?)\\s?\\$)")
 
 # Loose cues, used only as a proximity fallback. Longest alternatives first,
 # because Python's alternation takes the first that matches, not the longest.
@@ -181,7 +181,7 @@ def extract_prices(caption: str) -> tuple[list[PriceCandidate], str | None]:
                 anchored_kind.setdefault(absolute_start, (kind, f"anchored_{kind}"))
 
     for m in _MONEY.finditer(caption):
-        cents = int(round(float(m.group(1)) * 100))
+        amount = m.group(1) or m.group(2)\n        cents = int(round(float(amount) * 100))
         start, end = m.start(), m.end()
 
         # Step 1 result wins outright when present.
