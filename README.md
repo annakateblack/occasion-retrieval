@@ -45,19 +45,23 @@ images**, with **91.4% mean attribute coverage**.
 
 | Result | Observation |
 |---|---:|
-| Full-catalog top-10 nDCG | Flat between caption and enriched arms |
+| nDCG@10 | 0.0000 → 0.0000 |
+| nDCG@50 | 0.0000 → 0.1846 |
 | Catalog coverage | 7 of 157 candidates enriched (4.5%) |
-| Comparable anchors | 6 |
-| Anchor rank movement | 5 improved; 1 moved down by one place |
-| Mean anchor rank improvement | +20.5 places |
-| Mean anchor score delta | +0.0301 |
+| Positive anchors | 3 labelled; 2 reachable |
+| Reachable positive movement | rank 90 → 35 and 89 → 44 |
+| Comparable anchors | 6 of 8 |
+| Mean rank movement, all comparable anchors | +20.5 places |
+| Mean score delta, all comparable anchors | +0.0301 |
 
 This is **directional item-level evidence**, not proof that vision improved
-top-10 retrieval. The aggregate metric remained flat because enrichment reached
-only 4.5% of the candidate pool, which was too sparse to test a catalog-level
-ranking change fairly. The result supports scaling the same controlled
-experiment; it does not justify changing the ranker or claiming a system-wide
-quality gain.
+top-10 retrieval. nDCG@10 is exactly 0.0000 in both arms because no labelled
+positive appears in the top 10. At k=50, where the labelled positives actually
+enter the ranking, nDCG rises from 0.0000 to 0.1846 and both reachable positive
+anchors move substantially upward. Because only 7 of 157 candidates were
+enriched, this still does not establish catalog-wide lift; it shows that the
+visual signal affected the treated items in the intended direction at the depth
+where the labels have resolution.
 
 See [the experiment report](docs/VLM_EXPERIMENT_RESULTS.md) for the full
 interpretation and next-step design.
@@ -109,9 +113,10 @@ See [DATA_HANDLING.md](docs/DATA_HANDLING.md).
 
 Every sophistication layer must earn its place against a simpler baseline. A
 negative or flat result is preserved when it identifies the next useful
-experiment. Here, flat top-10 nDCG and positive anchor movement tell different,
+experiment. Here, zero top-10 nDCG and positive movement at deeper ranks tell different,
 compatible stories: the provider produced useful attributes for the items it
-saw, while the treatment was too sparse to establish full-catalog lift.
+saw, while the labelled positives were too deep in the baseline ranking for
+nDCG@10 to have resolution in this experiment.
 
 The next experiment is to enrich the full reachable inventory—or a predeclared,
 coverage-balanced sample—then repeat the same A/B with unchanged ranking
