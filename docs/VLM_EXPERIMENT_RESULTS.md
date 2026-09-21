@@ -4,8 +4,11 @@
 
 The live Anthropic vision path worked on every reachable anchor image and
 substantially increased the amount of structured visual information available
-for those items. Anchor-level ranks generally improved. Full-catalog top-10
-nDCG did not change because only 7 of 157 candidates received enrichment.
+for those items. Anchor-level ranks generally improved. nDCG@10 was 0.0000 in both arms because no labelled positive appeared in the
+top 10. At k=50, where the labelled positives enter the observed ranking,
+nDCG increased from 0.0000 to 0.1846. Only 7 of 157 candidates received
+enrichment, so this remains a sparse-treatment experiment rather than evidence
+of catalog-wide lift.
 
 The correct conclusion is narrow: **the provider and integration path produced
 useful directional movement on the treated anchors, while treatment coverage
@@ -39,12 +42,17 @@ conflicts, and transactional facts remained outside vision authority.
 | Successful live enrichments | 7/7 |
 | Mean visual-attribute coverage | 91.4% |
 | Enriched share of inventory | 4.5% |
-| Full-catalog top-10 nDCG change | Flat |
-| Comparable anchors | 6 |
+| nDCG@10 | 0.0000 → 0.0000 |
+| nDCG@20 | 0.0000 → 0.0000 |
+| nDCG@50 | 0.0000 → 0.1846 |
+| Positive anchors labelled | 3 |
+| Positive anchors reachable | 2 |
+| Reachable positive movement | 90 → 35; 89 → 44 |
+| Comparable anchors | 6 of 8 |
 | Anchors improving in rank | 5 |
 | Anchors moving down | 1, by one place |
-| Mean rank improvement | +20.5 places |
-| Mean score delta | +0.0301 |
+| Mean rank improvement over 6 comparable anchors | +20.5 places |
+| Mean score delta over 6 comparable anchors | +0.0301 |
 
 “Mean rank improvement” is reported over the six anchors that were comparable
 between arms; positive values mean movement toward rank 1. The seventh reachable
@@ -55,27 +63,31 @@ paired rank statistic.
 
 ### 1. Provider feasibility: positive
 
-All seven reachable images completed successfully, and 91.4% mean coverage
-shows that the structured contract captured most requested visual fields on
-this small anchor set. This validates the live request, response validation,
+All seven reachable images completed successfully, and the model filled 91.4%
+of requested visual-attribute slots across those seven processed listings. This validates the live request, response validation,
 normalization, provenance, and cache path as an operational pipeline.
 
 ### 2. Treated-item movement: directionally positive
 
 Five of six comparable anchors improved, with an average improvement of 20.5
-ranking positions and a +0.0301 average score change. That is consistent with
-the hypothesis that previously unknown visual attributes can affect the fixed
-ranker in useful ways.
+ranking positions and a +0.0301 average score change. More importantly, the two
+reachable positive anchors moved from ranks 90 and 89 to 35 and 44,
+respectively. That is consistent with the hypothesis that previously unknown
+visual attributes can affect the fixed ranker in useful ways.
 
 It is not a causal or population-level estimate. The anchor set is small and
 purpose-built, and one item moved down.
 
-### 3. Top-10 retrieval: no demonstrated improvement yet
+### 3. Reporting depth matters
 
-Top-10 nDCG was flat. This is not reported as a win. With only seven enriched
-items among 157 candidates, most of each ranking remained identical between
-arms. Sparse treatment limits how much a top-10 aggregate can move, even when
-some treated items change substantially.
+nDCG@10 is not merely "flat": it is 0.0000 in both arms. No labelled positive
+appears in the top 10, so that metric has no resolution on this label set.
+The same remains true at k=20. At k=50, the enriched arm recalls both reachable
+positive anchors and nDCG increases from 0.0000 to 0.1846.
+
+The predeclared top-10 metric should still be reported exactly as specified.
+The deeper curve is a diagnostic explaining why the top-10 number is
+uninformative here, not a replacement chosen after seeing the result.
 
 The result therefore separates two questions:
 
