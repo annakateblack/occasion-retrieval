@@ -1,0 +1,26 @@
+{
+  "name": "Date Night",
+  "event_types": [
+    "date_night",
+    "cocktail"
+  ],
+  "event_date": "2026-10-10",
+  "vibe_text": "relaxed elevated, season neutral",
+  "vibe_tags": [],
+  "length_preference": {
+    "mini": 1.0,
+    "midi": 0.7,
+    "maxi": 0.3,
+    "unknown": 0.5
+  },
+  "price_rule": {
+    "max_rental_price_cents": 10000,
+    "applies_to_lengths": [
+      "mini",
+      "midi"
+    ],
+    "is_hard_filter": true
+  },
+  "exclude_unavailable_on_date": true,
+  "allow_unknown_availability": true
+}

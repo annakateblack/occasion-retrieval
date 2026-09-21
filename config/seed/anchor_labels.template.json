@@ -1,0 +1,51 @@
+{
+  "name": "anchor_labels_template",
+  "description": "PUBLIC TEMPLATE. Shows the anchor-label shape with invented permalinks. Real labels belong in data/local/eval/anchor_labels.json, which is gitignored.",
+  "created_at": "2026-09-20",
+  "is_real": false,
+  "labeller": "example",
+  "_shape_note": "grade is one of: strong | plausible | weak | not_relevant. event_key should match a file in config/events/ where one exists. negative_associations hold testable anti-rules.",
+  "relevance_scale_max": 2,
+  "items": [
+    {
+      "shortcode": "TEMPLATEAAA1",
+      "permalink": "https://www.instagram.com/p/TEMPLATEAAA1/",
+      "relevance": [
+        {
+          "event_key": "my_tie",
+          "grade": "strong",
+          "note": "why this fits the event"
+        },
+        {
+          "event_key": "date_night_versatile",
+          "grade": "plausible"
+        }
+      ],
+      "visual_notes": "what the labeller saw, in their own words",
+      "fit_notes": "caveats about size or fit that qualify the grades",
+      "label_confidence": "medium",
+      "tags": [
+        "example_tag"
+      ]
+    },
+    {
+      "shortcode": "TEMPLATEBBB2",
+      "permalink": "https://www.instagram.com/p/TEMPLATEBBB2/",
+      "relevance": [
+        {
+          "event_key": "christmas_cocktail",
+          "grade": "weak",
+          "note": "graded down on purpose"
+        }
+      ],
+      "visual_notes": "sparkly but not holiday-specific",
+      "label_confidence": "high",
+      "negative_associations": [
+        "sparkle_implies_holiday"
+      ],
+      "tags": [
+        "sparkle"
+      ]
+    }
+  ]
+}

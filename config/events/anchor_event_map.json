@@ -1,0 +1,10 @@
+{
+  "_comment": "Maps anchor label event_key values to event config files. Anchor keys are the labeller's vocabulary; event configs are the ranker's. Keeping the mapping explicit means either side can be renamed without silently dropping an event from the comparison.",
+  "my_tie": "my_tie_september.json",
+  "christmas_cocktail": "christmas_cocktail.json",
+  "date_night_generic": "date_night_generic.json",
+  "date_night_versatile": "date_night_versatile.json",
+  "date_night_winter": "date_night_winter.json",
+  "parents_weekend_formal": "parents_weekend_formal.json",
+  "fun_cocktail": "fun_cocktail.json"
+}

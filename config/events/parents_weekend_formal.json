@@ -1,0 +1,23 @@
+{
+  "name": "Parents Weekend Formal",
+  "event_types": [
+    "formal",
+    "parents_weekend"
+  ],
+  "event_date": "2026-10-24",
+  "vibe_text": "elevated classic, longer lengths preferred",
+  "vibe_tags": [],
+  "length_preference": {
+    "mini": 0.3,
+    "midi": 0.6,
+    "maxi": 1.0,
+    "unknown": 0.5
+  },
+  "price_rule": {
+    "max_rental_price_cents": null,
+    "applies_to_lengths": [],
+    "is_hard_filter": false
+  },
+  "exclude_unavailable_on_date": true,
+  "allow_unknown_availability": true
+}

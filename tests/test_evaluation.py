@@ -127,7 +127,7 @@ def test_private_loader_rejects_labels_outside_local_eval(tmp_path: Path):
         json.dumps({"query_id": "synthetic", "labels": {"A": 3}, "is_measured": True}),
         encoding="utf-8",
     )
-    with pytest.raises(ValueError, match="data/local/eval"):
+    with pytest.raises(ValueError, match=r"data[\\/]local[\\/]eval"):
         load_private_judgments(public, repo_root=tmp_path)
 
 

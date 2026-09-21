@@ -1,0 +1,115 @@
+{
+  "name": "dress_visual_seed_v1",
+  "description": "Eight hand-labeled dresses used to ground and evaluate the visual extractor. Each carries human-stated expected attributes, so extractor output can be scored against a person rather than against itself. Two entries are deliberate near-misses: a system that ranks them highly is matching the occasion but not the wearer's stated construction preferences.",
+  "created_at": "2026-09-20",
+  "is_synthetic": true,
+  "_assumption": "PLACEHOLDER PERMALINKS. The eight real permalinks were never supplied in conversation, so these shortcodes are invented and resolve to nothing. Replace `permalink` and `shortcode` with the real ones and set is_synthetic=false. Until that flag is false, no metric computed against this set may be reported as measured.",
+  "items": [
+    {
+      "shortcode": "SEEDMYTIE01",
+      "permalink": "https://www.instagram.com/p/SEEDMYTIE01/",
+      "label": "Bright warm-season mini, plunging neckline, exactly the My Tie target",
+      "event_hint": "my_tie",
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "pink", "brightness": "light", "saturation": "vivid",
+        "hem_length": "mini", "neckline": "plunge_v", "silhouette": "a_line",
+        "sleeve_length": "sleeveless", "strap_type": "thin",
+        "fit_impression": "semi_fitted", "formality": "3"
+      },
+      "notes": "Positive anchor for bright / playful / late-summer."
+    },
+    {
+      "shortcode": "SEEDMYTIE02",
+      "permalink": "https://www.instagram.com/p/SEEDMYTIE02/",
+      "label": "Bright citrus mini with a one-shoulder asymmetric neckline",
+      "event_hint": "my_tie",
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "orange", "brightness": "light", "saturation": "vivid",
+        "hem_length": "mini", "neckline": "one_shoulder", "silhouette": "fit_and_flare",
+        "sleeve_length": "sleeveless", "strap_type": "one_shoulder",
+        "shoulder_emphasis": "draped", "formality": "3"
+      },
+      "notes": "Tests that asymmetric necklines score above straight-across."
+    },
+    {
+      "shortcode": "SEEDMYTIE03",
+      "permalink": "https://www.instagram.com/p/SEEDMYTIE03/",
+      "label": "Near-miss: right brightness and length, flat straight-across strapless",
+      "event_hint": "my_tie",
+      "is_positive": false,
+      "expected_attributes": {
+        "colour_family": "yellow", "brightness": "light", "saturation": "vivid",
+        "hem_length": "mini", "neckline": "straight_strapless",
+        "silhouette": "bodycon", "strap_type": "none_strapless",
+        "fit_impression": "very_fitted", "formality": "3"
+      },
+      "notes": "CONTRAST CASE. Matches the occasion, conflicts with stated construction preferences. Should rank below the positives despite identical colour and hem."
+    },
+    {
+      "shortcode": "SEEDXMAS01",
+      "permalink": "https://www.instagram.com/p/SEEDXMAS01/",
+      "label": "Deep red long-sleeve mini with sequin surface, Christmas Cocktail target",
+      "event_hint": "christmas_cocktail",
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "red", "brightness": "dark", "saturation": "vivid",
+        "hem_length": "mini", "neckline": "v_neck", "sleeve_length": "long",
+        "embellishment": "sequin", "texture": "sequin_fabric", "formality": "4"
+      },
+      "notes": "Positive anchor for holiday / sparkle / long sleeve."
+    },
+    {
+      "shortcode": "SEEDXMAS02",
+      "permalink": "https://www.instagram.com/p/SEEDXMAS02/",
+      "label": "Emerald velvet cowl-neck midi, cold-weather holiday styling",
+      "event_hint": "christmas_cocktail",
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "green", "brightness": "dark", "saturation": "moderate",
+        "hem_length": "midi", "neckline": "cowl", "silhouette": "slip",
+        "sleeve_length": "sleeveless", "texture": "velvet", "formality": "4"
+      },
+      "notes": "Tests midi remaining eligible when the vibe match is strong."
+    },
+    {
+      "shortcode": "SEEDXMAS03",
+      "permalink": "https://www.instagram.com/p/SEEDXMAS03/",
+      "label": "Near-miss: correct holiday palette, heavy structured corset bodice",
+      "event_hint": "christmas_cocktail",
+      "is_positive": false,
+      "expected_attributes": {
+        "colour_family": "red", "brightness": "dark", "saturation": "vivid",
+        "hem_length": "mini", "neckline": "straight_strapless",
+        "silhouette": "corset", "strap_type": "corset_boned",
+        "fit_impression": "very_fitted", "formality": "4"
+      },
+      "notes": "CONTRAST CASE. Right palette, construction that depends on structured bust support."
+    },
+    {
+      "shortcode": "SEEDFORMAL01",
+      "permalink": "https://www.instagram.com/p/SEEDFORMAL01/",
+      "label": "Floor-length flowing gown, deep V, formal anchor",
+      "event_hint": "formal",
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "blue", "brightness": "dark", "saturation": "moderate",
+        "hem_length": "floor", "neckline": "plunge_v", "silhouette": "a_line",
+        "sleeve_length": "sleeveless", "fit_impression": "flowing", "formality": "5"
+      },
+      "notes": "Tests that maxi outranks mini once the event asks for it."
+    },
+    {
+      "shortcode": "SEEDEDGE01",
+      "permalink": "https://www.instagram.com/p/SEEDEDGE01/",
+      "label": "Deliberately hard image: cropped hem, dim lighting, partial garment",
+      "event_hint": null,
+      "is_positive": true,
+      "expected_attributes": {
+        "colour_family": "black", "hem_length": "", "neckline": ""
+      },
+      "notes": "EDGE CASE. Expected attributes are intentionally sparse. A correct extractor returns nulls and low confidence here rather than guessing; an extractor that fills every field confidently on this image is fabricating."
+    }
+  ]
+}
