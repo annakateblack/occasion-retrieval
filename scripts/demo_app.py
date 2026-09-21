@@ -201,7 +201,36 @@ def main() -> int:
             params = parse_qs(parsed.query)
             query = params.get("q", ["I need a My Tie dress for spring under $100"])[0]
             event = event_from_query(query)
-            run = rank(inventory, profile, event, top_k=8, attribute_provider=provider)
+            # Demo-only rerank: for visually specific requests, prefer candidates
+            # with actual style/season evidence instead of letting price/fit dominate.
+            run = rank(inventory, profile, event, top_k=60, attribute_provider=provider)
+            q_lower = query.lower()
+            visual_request = any(term in q_lower for term in (
+                "christmas", "holiday", "festive", "spark", "sequin", "glam",
+                "spring", "summer", "bright", "playful", "romantic", "my tie",
+            ))
+            if visual_request:
+                def demo_score(row):
+                    event_score = row.event_score if row.event_score is not None else 0.5
+                    season_score = row.seasonality_score if row.seasonality_score is not None else 0.35
+                    style_score = row.style_score if row.style_score is not None else 0.35
+                    evidence_bonus = 0.05 * sum(
+                        value is not None
+                        for value in (row.style_score, row.seasonality_score)
+                    )
+                    return (
+                        row.overall_score
+                        + 0.18 * (event_score - 0.5)
+                        + 0.12 * (season_score - 0.5)
+                        + 0.08 * (style_score - 0.5)
+                        + evidence_bonus
+                    )
+
+                run.results.sort(key=lambda row: (-demo_score(row), row.rank, row.shortcode))
+            run.results = run.results[:8]
+            run.returned = len(run.results)
+            for index, row in enumerate(run.results, start=1):
+                row.rank = index
             body = page(query, run, args.image_root, enriched_count).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
