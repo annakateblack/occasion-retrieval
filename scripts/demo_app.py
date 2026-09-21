@@ -91,20 +91,27 @@ def pct(value: float | None) -> str:
     return "—" if value is None else f"{value * 100:.0f}%"
 
 
-def image_for(shortcode: str, image_root: Path) -> Path | None:
+def image_src(shortcode: str, image_root: Path) -> str:
+    """Prefer a private local image, otherwise ask Instagram for the public post image.
+
+    The fallback does not download or persist anything; the browser requests the
+    image directly from Instagram at render time. If Instagram blocks the request,
+    the card's onerror handler falls back to the neutral placeholder.
+    """
     for suffix in (".jpg", ".jpeg", ".png", ".webp"):
         p = image_root / f"{shortcode}{suffix}"
         if p.exists():
-            return p
-    return None
+            return f"/image/{p.name}"
+    return f"https://www.instagram.com/p/{shortcode}/media/?size=l"
 
 
 def card(row, image_root: Path) -> str:
-    img = image_for(row.shortcode, image_root)
-    if img:
-        visual = f'<img src="/image/{html.escape(img.name)}" alt="dress image">'
-    else:
-        visual = '<div class="placeholder">✦</div>'
+    src = image_src(row.shortcode, image_root)
+    visual = (
+        f'<img src="{html.escape(src, quote=True)}" alt="dress image" '
+        'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        '<div class="placeholder fallback-placeholder" style="display:none">✦</div>'
+    )
     owner = html.escape(row.owner_username or "rental listing")
     explanation = html.escape(row.explanation)
     flags = " · ".join(html.escape(f) for f in row.flags)
