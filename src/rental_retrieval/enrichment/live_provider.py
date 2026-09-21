@@ -281,7 +281,6 @@ class AnthropicVisionProvider:
         return {
             "model": self.model_version,
             "max_tokens": self.max_tokens,
-            "temperature": 0,          # determinism matters more than variety here
             "system": SYSTEM_PROMPT,
             "tools": [build_extraction_tool()],
             "tool_choice": {"type": "tool", "name": EXTRACTION_TOOL_NAME},
@@ -369,7 +368,6 @@ class AnthropicVisionProvider:
             "model_version": self.model_version,
             "contract_fingerprint": self.contract_fingerprint,
             "api_base": self.api_base,
-            "temperature": 0,
             "structured_output": f"tool_use:{EXTRACTION_TOOL_NAME}",
             "last_usage": self.last_usage,
         }

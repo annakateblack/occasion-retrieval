@@ -187,13 +187,13 @@ def test_tool_schema_enum_matches_the_vocabulary():
     assert set(FIELD_VOCABULARIES["silhouette"]) <= set(v for v in enum if v)
 
 
-def test_payload_pins_tool_choice_and_zero_temperature(monkeypatch, image_file):
+def test_payload_pins_tool_choice_without_temperature(monkeypatch, image_file):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "x")
     provider = AnthropicVisionProvider()
     data, media_type = resolve_image_source(str(image_file))
     payload = provider._build_payload(data, media_type)
     assert payload["tool_choice"] == {"type": "tool", "name": EXTRACTION_TOOL_NAME}
-    assert payload["temperature"] == 0
+    assert "temperature" not in payload
     assert payload["messages"][0]["content"][0]["source"]["media_type"] == "image/png"
 
 

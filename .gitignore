@@ -100,3 +100,8 @@ notebooks/**/*.ipynb
 .DS_Store
 Thumbs.db
 desktop.ini
+
+data/local/eval/
+data/local/seed_images/
+data/local/enriched/
+data/local/enrichment_cache/
