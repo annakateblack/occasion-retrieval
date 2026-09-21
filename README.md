@@ -1,104 +1,145 @@
-# Personalized multimodal retrieval over fragmented social-commerce inventory
+# Occasion retrieval from fragmented social-commerce inventory
 
-A retrieval and ranking system that recommends rental dresses from student-run
-Instagram inventory, personalized to a taste profile learned from a user's saved
-products rather than from self-description.
+A privacy-conscious retrieval experiment for recommending rental dresses from
+semi-structured Instagram inventory. The project asks a narrow technical
+question: **can image-derived garment attributes improve an explainable,
+deterministic ranker when listing captions omit most visual details?**
 
-**Status:** Deterministic caption baseline complete; provider-neutral visual
-enrichment and evaluation integration are prepared on an experimental branch.
+The current system includes a caption-only baseline, live Anthropic vision
+enrichment behind a provider-neutral contract, provenance-aware merging, and a
+controlled evaluation harness. It has **296 passing tests**.
 
-## The problem, stated as a systems problem
+## What the system does
 
-Personalized, cross-domain, multimodal ranking over a small, noisy,
-semi-structured catalog, with implicit positive-only supervision and hard
-business constraints.
+The pipeline converts noisy rental listings into event-specific ranked results:
 
-Three properties make it non-trivial:
+1. Parse the user's official Instagram export locally.
+2. Normalize rental listings without inventing missing facts.
+3. Apply hard constraints such as size, price, and availability.
+4. Score the survivors on interpretable fit, event, style, seasonality, price,
+   and availability components.
+5. Optionally use a vision model to fill visual attributes that captions left
+   unknown, then rerun the **same** ranker with the **same** settings.
 
-**Cross-domain representation transfer.** The taste corpus is clean retail
-product photography. The catalog is iPhone mirror selfies in dorm rooms. Naive
-image-embedding similarity partly measures "studio photo versus bedroom photo"
-rather than style. Mitigating that is the central design problem, not the
-retrieval.
+The vision model does not rank dresses. It produces structured observations;
+the deterministic ranker remains the decision layer.
 
-**Positive-unlabeled learning.** Saved products say what the user likes. Nothing
-says what they rejected. Similarity scores from a positive-only model have no
-calibrated meaning in absolute terms.
+## Why image enrichment was added
 
-**Query-conditional personalization.** "My taste" is conditional on occasion. A
-single global taste vector recommends going-out clothes for a formal.
+The caption baseline established a useful floor: it could enforce constraints
+and explain its scores, but captions described transactional facts far better
+than visual style. Neckline, silhouette, colour, sleeve, fabric, and
+embellishment were often unknown, so different event queries could collapse
+toward similar results.
 
-## Pipeline
+Image enrichment was therefore introduced as a controlled observability
+experiment. Arm A uses caption attributes. Arm B starts with those same
+attributes and lets vision fill only unknown visual fields above a confidence
+threshold. Filters, weights, thresholds, sorting, and explanation logic remain
+fixed between arms.
 
+## First live experiment
+
+The first live Anthropic run successfully enriched **7 of 7 reachable anchor
+images**, with **91.4% mean attribute coverage**.
+
+| Result | Observation |
+|---|---:|
+| Full-catalog top-10 nDCG | Flat between caption and enriched arms |
+| Catalog coverage | 7 of 157 candidates enriched (4.5%) |
+| Comparable anchors | 6 |
+| Anchor rank movement | 5 improved; 1 moved down by one place |
+| Mean anchor rank improvement | +20.5 places |
+| Mean anchor score delta | +0.0301 |
+
+This is **directional item-level evidence**, not proof that vision improved
+top-10 retrieval. The aggregate metric remained flat because enrichment reached
+only 4.5% of the candidate pool, which was too sparse to test a catalog-level
+ranking change fairly. The result supports scaling the same controlled
+experiment; it does not justify changing the ranker or claiming a system-wide
+quality gain.
+
+See [the experiment report](docs/VLM_EXPERIMENT_RESULTS.md) for the full
+interpretation and next-step design.
+
+## Architecture at a glance
+
+```mermaid
+flowchart TD
+    A["Official export + local images"] --> B["Normalize listings"]
+    B --> C["Caption attributes"]
+    A --> D["Vision enrichment"]
+    D --> E["Validate, cache, record provenance"]
+    C --> F["Fill unknown visual fields"]
+    E --> F
+    F --> G["Same deterministic ranker"]
+    C --> G
+    G --> H["Controlled A/B evaluation"]
 ```
-SOURCES (snapshot files) → adapters → normalization
-                                          ↓
-                          VLM attribute + canonical-text extraction
-                                          ↓
-                          dual-view embeddings (image, canonical text)
-                                          ↓
-                          Postgres + pgvector
-                                          ↓
-  event query → parse → hard filter (SQL) → vector retrieval → score fusion
-                                          → [rerank] → diversify → results
-```
 
-Hard filters run first because a size 12 dress that perfectly matches taste has
-relevance exactly zero. Constraints are not preferences.
+The main boundaries are deliberate:
 
-## Design principles
+- **Caption authority:** size, price, availability, and stated dates are never
+  overridden by vision.
+- **Fill-only policy:** known caption values stay; disagreements are recorded as
+  conflicts rather than silently replaced.
+- **Provider neutrality:** provider-specific responses are normalized before
+  they reach ranking.
+- **Reproducibility:** model version and prompt/contract fingerprint are part of
+  extraction provenance and cache identity.
+- **Evaluation isolation:** only the attribute source changes between arms.
 
-**Baseline before sophistication.** The first taste model is top-5 nearest
-neighbor. Clustering, attribute scoring, learned fusion weights, and reranking
-are each gated on beating the previous step on a labeled evaluation set. A step
-that does not beat its predecessor is reported as a negative result, not merged.
-See [ADR 003](docs/adr/0003-taste-model-sequencing.md).
+Read [the architecture guide](docs/ARCHITECTURE.md) for component and trust
+boundaries.
 
-**Evaluation early.** The labeling tool and metrics harness are built before the
-sophisticated personalization, because every layer after the baseline claims an
-improvement that needs a number.
+## Privacy and provenance
 
-**No technology without an architectural reason.** No agents: the pipeline is a
-known DAG with no branching uncertainty. No dedicated vector database: at this
-scale it would split metadata from vectors and break filtered recall. No ANN
-index in V1: exact search over a few thousand filtered rows is a few
-milliseconds with perfect recall.
+No private export, downloaded image, real caption, permalink, username,
+relevance label, API credential, or row-level live result is committed.
+Sensitive artifacts remain under gitignored `data/local/` paths.
 
-**Orchestration is not reasoning.** n8n schedules, retries, and calls endpoints.
-It holds no business logic. If an n8n Code node does anything more than reshape
-a JSON payload, that logic belongs in Python and something has gone wrong.
-See [ADR 004](docs/adr/0004-orchestration-boundary.md).
+Each accepted visual observation retains its source, confidence, evidence,
+provider, model version, and contract fingerprint. This makes it possible to
+audit which facts came from caption text, which came from vision, and how a
+conflict was resolved without publishing the underlying private content.
 
-## Data handling
+See [DATA_HANDLING.md](docs/DATA_HANDLING.md).
 
-This repository processes personal data and third-party content and commits
-neither. The project never holds Instagram credentials, cookies, or session
-tokens; ingestion uses the user's own official data export and resolution of
-individual public post permalinks. Inventory sources are isolated behind a
-snapshot-based adapter interface, so no external backend is a runtime
-dependency. See [docs/DATA_HANDLING.md](docs/DATA_HANDLING.md).
+## Evaluation philosophy
 
-Results derived from the user's own saved collection are positively biased by
-construction and are labeled as development-set results. An unbiased holdout is
-sampled by account, not by post.
+Every sophistication layer must earn its place against a simpler baseline. A
+negative or flat result is preserved when it identifies the next useful
+experiment. Here, flat top-10 nDCG and positive anchor movement tell different,
+compatible stories: the provider produced useful attributes for the items it
+saw, while the treatment was too sparse to establish full-catalog lift.
 
-## Documentation
+The next experiment is to enrich the full reachable inventory—or a predeclared,
+coverage-balanced sample—then repeat the same A/B with unchanged ranking
+settings. Primary outcome: nDCG@10. Secondary diagnostics: anchor movement,
+attribute coverage, top-k overlap, hard-filter survivors, conflicts, and cutoff
+ties.
 
-| | |
+## Repository guide
+
+| Document | Purpose |
 |---|---|
-| [ADRs](docs/adr/) | Why each major decision was made, and what was rejected |
-| [DECISIONS.md](docs/DECISIONS.md) | Locked / reversible / pending register |
-| [REPO_STRUCTURE.md](docs/REPO_STRUCTURE.md) | Layout and public/private boundaries |
-| [DATA_HANDLING.md](docs/DATA_HANDLING.md) | What may never be committed |
-| [PHASE_0_CHECKLIST.md](docs/PHASE_0_CHECKLIST.md) | Current phase exit criteria |
-| [VLM_EVALUATION_PLAN.md](docs/VLM_EVALUATION_PLAN.md) | Controlled caption-vs-vision experiment |
-| [VLM_INTEGRATION_NOTES.md](docs/VLM_INTEGRATION_NOTES.md) | Incoming implementation handoff and conflicts |
+| [Architecture](docs/ARCHITECTURE.md) | Current components, data flow, and trust boundaries |
+| [First live results](docs/VLM_EXPERIMENT_RESULTS.md) | Results, limitations, and next experiment |
+| [Evaluation plan](docs/VLM_EVALUATION_PLAN.md) | Controlled experiment and metric definitions |
+| [ADRs](docs/adr/) | Decisions, alternatives, and consequences |
+| [Decision register](docs/DECISIONS.md) | Locked, reversible, and pending choices |
+| [Data handling](docs/DATA_HANDLING.md) | Public/private boundary |
+| [Repository structure](docs/REPO_STRUCTURE.md) | Code and artifact locations |
 
-## Setup
+## Local setup
 
 ```bash
 uv sync
-cp .env.example .env    # fill in locally; never committed
+uv run pytest
 ```
+
+Tests and synthetic examples run without private data or live model calls. Live
+vision enrichment is opt-in and requires local credentials; credentials and
+outputs remain outside Git.
 
 Requires Python 3.12+.
