@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from rental_retrieval.schemas.anchors import AnchorLabel, AnchorSet, EventRelevance
 from rental_retrieval.schemas.ranking import RankedDress, RankingRun
 from scripts.report_vlm_experiment import summarize
@@ -87,5 +89,5 @@ def test_summarize_reports_anchor_movement_and_score_delta():
     assert report["anchors_moved_up"] == 1
     assert report["anchors_moved_down"] == 1
     assert report["mean_rank_move"] == 0
-    assert report["mean_score_delta"] == 0.05
+    assert report["mean_score_delta"] == pytest.approx(0.05)
     assert report["vision_ndcg_at_k"] > report["caption_ndcg_at_k"]
