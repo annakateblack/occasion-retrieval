@@ -52,7 +52,7 @@ Status values:
 | Own saved collection is dev-only, labeled biased | LOCKED | Positively selected by construction | Nothing. An unbiased holdout is built separately in Phase 10 |
 | Unbiased holdout sampled by account, then posts wholesale | LOCKED | Sampling posts the user chose reproduces the bias | Nothing |
 | V1 catalog target ~400 listings, floor 250 | REVERSIBLE | Post-filter pools need ~80–120 candidates/query for nDCG to discriminate | Measured post-filter pool sizes once real size/price distributions are known |
-| Graded 0/1/2 labels, pooled across variants | LOCKED | Graded labels enable nDCG; pooling prevents favoring the system that produced the pool | Nothing |
+| Graded 0/1/2 labels, pooled across variants | LOCKED | Graded labels enable nDCG; pooling prevents favoring the system that produced the pool. Existing anchors map strong=2, plausible=1, weak/not_relevant=0 and are not rescaled. | Nothing |
 | nDCG@10 primary, P@10 + Recall@120 secondary | REVERSIBLE | nDCG suits graded labels; Recall@120 separates funnel leakage from ranking | Finding a metric that better matches the DM decision |
 | Held-out query set (6 of ~22) for final numbers | LOCKED | Fitting and reporting on the same queries is not an evaluation | Nothing |
 

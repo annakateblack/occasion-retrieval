@@ -14,9 +14,9 @@ from rental_retrieval.schemas.ranking import RankingRun
 class QueryJudgments(BaseModel):
     """Graded relevance labels for one event query.
 
-    The metric code accepts any non-negative integer scale, covering the
-    currently documented 0..2 and 0..3 alternatives without baking the open
-    documentation decision into code.
+    The current real anchor set is explicitly 0..2. The generic metric keeps
+    support for a separately declared future 0..3 set; it never rescales or
+    rewrites existing labels.
     """
 
     query_id: str
@@ -24,8 +24,8 @@ class QueryJudgments(BaseModel):
     relevance_scale_max: Literal[2, 3] | None = Field(
         default=None,
         description=(
-            "Declared maximum grade. Required for measured labels while the repository's "
-            "0..2 versus 0..3 decision remains unresolved."
+            "Declared maximum grade. The current measured anchor set declares 2; "
+            "alternate scales require a different, explicitly declared label set."
         ),
     )
     is_measured: bool = Field(

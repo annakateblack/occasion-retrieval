@@ -73,19 +73,30 @@ Real user labels stay under `data/local/` and must never be committed. Public te
 
 Use graded relevance:
 
-- 3 = strong fit for the event
-- 2 = plausible
-- 1 = weak but possible
-- 0 = bad fit
+- 2 = strong fit for the event
+- 1 = plausible fit
+- 0 = weak or not relevant
 
-**Open decision before labeling:** `DECISIONS.md` currently locks a 0/1/2
-scale, while this plan describes 0/1/2/3. The metric implementation accepts
-either non-negative graded scale, but a single scale must be selected before
-human labels are produced or compared. Every measured label file must declare
-`relevance_scale_max` as `2` or `3`; declaring the scale records the decision
-but does not make it.
+This is the locked 0/1/2 scale in `DECISIONS.md` and the scale declared by the
+existing real anchor file. Existing labels are not rewritten or rescaled:
+`strong -> 2`, `plausible -> 1`, and both `weak` and `not_relevant -> 0`.
+Those two zero-grade words remain distinct for error analysis even though nDCG
+treats them equally. The generic metric can evaluate a future label set that
+explicitly declares a maximum of 3, but such a set must not be mixed with or
+silently substituted for the current labels.
 
 Primary metric: **nDCG@10**.
+
+Report it in two views:
+
+- **full-qrel nDCG@10** uses every label, including positive anchors absent
+  from the ranked inventory. This exposes candidate-generation or recall loss.
+- **reachable-qrel nDCG@10** uses only labels whose items are in the inventory
+  presented to the ranker. This isolates ranking quality among candidates that
+  could actually appear.
+
+The report must show both. Reachable-qrel nDCG must use persisted inventory
+coverage from the experiment, never infer reachability from returned ranks.
 
 Secondary diagnostics:
 - top-10 overlap across intentionally different event queries
@@ -98,6 +109,17 @@ Tie diagnostics require retaining results below the reporting cutoff. An
 evaluation run truncated to exactly 10 cannot establish whether rank 10 is tied
 with rank 11. If the last retained row is still tied with rank 10, the reported
 tie count is a lower bound; retain more rows until the score changes.
+
+Visual enrichment is fill-only, but `length` is also consumed by the hard
+filter. Filling an unknown caption-derived length from vision can therefore
+change whether an item survives filtering. Every report must show the enriched
+minus caption-only hard-filter survivor delta; a non-zero delta requires item
+level review and is not automatically a gain or regression.
+
+Published metrics are gated. By default the reporting command refuses to emit
+metrics unless the anchor set is real and the recorded provider is live.
+Synthetic or stub harness output requires an explicit unmeasured override and
+must remain labelled **NOT MEASURED**.
 
 ## Success criteria
 
@@ -129,3 +151,7 @@ Public repo artifacts should contain only:
 - synthetic fixtures
 - evaluation code
 - aggregate metrics that do not expose private content
+
+For screenshots or interviews, use redacted reporting. It replaces shortcodes
+with stable `anchor_NNN` identifiers and excludes captions, usernames,
+permalinks, label notes, and raw relevance labels.

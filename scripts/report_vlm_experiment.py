@@ -23,14 +23,32 @@ def main() -> int:
     parser.add_argument("--event-key", required=True)
     parser.add_argument("--k", type=int, default=10)
     parser.add_argument("--json-out", type=Path, default=None)
+    parser.add_argument(
+        "--redacted",
+        action="store_true",
+        help="Replace shortcodes with stable anchor_NNN IDs for screenshots.",
+    )
+    parser.add_argument(
+        "--allow-unmeasured",
+        action="store_true",
+        help="Explicitly report a synthetic/stub harness run as NOT MEASURED.",
+    )
     args = parser.parse_args()
 
     experiment, anchors = load_inputs(args.experiment, args.anchors)
-    summary = summarize(experiment, anchors, args.event_key, k=args.k)
+    summary = summarize(
+        experiment,
+        anchors,
+        args.event_key,
+        k=args.k,
+        label_source=str(args.anchors),
+        require_measured=not args.allow_unmeasured,
+        redact=args.redacted,
+    )
     print_report(summary)
 
     if args.json_out is not None:
-        if "local" not in args.json_out.resolve().parts:
+        if not args.redacted and "local" not in args.json_out.resolve().parts:
             parser.error("Refusing to write a private report outside a path containing 'local'.")
         args.json_out.parent.mkdir(parents=True, exist_ok=True)
         args.json_out.write_text(json.dumps(summary, indent=2), encoding="utf-8")

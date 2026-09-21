@@ -158,6 +158,7 @@ def main() -> int:
     for caveat in gate.caveats():
         print(f"    !! {caveat}")
 
+    coverage = None
     if anchors is not None:
         coverage = compute_anchor_coverage(
             anchors, {p.shortcode for p in inventory}, enriched)
@@ -192,6 +193,7 @@ def main() -> int:
         "event": event.name,
         "settings": settings.model_dump(),
         "gate": gate.model_dump(),
+        "anchor_coverage": coverage.model_dump() if coverage is not None else None,
         "vision_provider_audit": audit,
         "runs": runs.model_dump() if hasattr(runs, "model_dump") else str(runs),
     }
