@@ -85,7 +85,7 @@ def _canon_alpha(token: str) -> str:
 
 # --- Price -------------------------------------------------------------------
 
-_MONEY = re.compile(r"(?:\\$\\s?(\\d{1,4}(?:\\.\\d{2})?)|(\\d{1,4}(?:\\.\\d{2})?)\\s?\\$)")
+_MONEY = re.compile(r"(?:\$\s?(\d{1,4}(?:\.\d{2})?)|(\d{1,4}(?:\.\d{2})?)\s?\$)")
 
 # Loose cues, used only as a proximity fallback. Longest alternatives first,
 # because Python's alternation takes the first that matches, not the longest.
