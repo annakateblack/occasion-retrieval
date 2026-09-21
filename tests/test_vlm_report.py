@@ -55,7 +55,7 @@ def _run(rows: list[RankedDress]) -> RankingRun:
 
 
 def test_summarize_reports_anchor_movement_and_score_delta():
-    caption = _run([_row("A", 2, 0.5, None), _row("B", 1, 0.7, 0.5)])
+    caption = _run([_row("B", 1, 0.7, 0.5), _row("A", 2, 0.5, None)])
     vision = _run([_row("A", 1, 0.7, 0.5), _row("B", 2, 0.6, 0.5)])
     experiment = {
         "runs": {
