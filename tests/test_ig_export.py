@@ -256,6 +256,16 @@ def test_sole_bare_amount_is_used_but_flagged():
     assert "rental_price_inferred_from_sole_amount" in warnings
 
 
+def test_trailing_dollar_amount_is_parsed_and_inferred():
+    prices, raw = extract.extract_prices(
+        "Reformation mini dress! Size 6 50$ + dry cleaning! Available after Sep 24th"
+    )
+    cents, warnings = extract.resolve_rental_price(prices)
+    assert cents == 5000
+    assert raw == "50$"
+    assert "rental_price_inferred_from_sole_amount" in warnings
+
+
 def test_no_price_yields_none_without_warning_noise():
     prices, raw = extract.extract_prices("beautiful gown available")
     assert prices == []
