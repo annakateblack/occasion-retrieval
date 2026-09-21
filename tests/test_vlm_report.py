@@ -4,7 +4,7 @@ import pytest
 
 from rental_retrieval.schemas.anchors import AnchorLabel, AnchorSet, EventRelevance
 from rental_retrieval.schemas.ranking import RankedDress, RankingRun
-from scripts.report_vlm_experiment import summarize
+from rental_retrieval.eval.reporting import summarize
 
 
 def _row(code: str, rank: int, score: float, style: float | None) -> RankedDress:
