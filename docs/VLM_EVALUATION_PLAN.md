@@ -2,6 +2,12 @@
 
 This document defines the experiment that follows the deterministic personalized baseline.
 
+**Current status:** The first live feasibility run is complete. Anthropic vision
+enriched 7/7 reachable anchor images with 91.4% mean attribute coverage. Top-10
+nDCG was flat with only 7/157 candidates enriched, while 5/6 comparable anchors
+improved in rank. See [VLM_EXPERIMENT_RESULTS.md](VLM_EXPERIMENT_RESULTS.md)
+for the results, limitations, and scaled follow-up design.
+
 ## Question
 
 Does adding structured visual attributes improve event-specific rental-dress ranking over the caption-only baseline?
@@ -131,6 +137,10 @@ It should demonstrate:
 - improved nDCG@10 on the labelled query set;
 - no regression in hard-filter correctness;
 - no hidden defaulting of unknown attributes.
+
+The first live run met the provider-feasibility and local coverage goals but did
+not meet the catalog-level nDCG gate. It remains a feasibility result until the
+same experiment is repeated at materially broader inventory coverage.
 
 ## Failure analysis
 

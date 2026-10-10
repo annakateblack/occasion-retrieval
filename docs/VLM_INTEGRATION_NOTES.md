@@ -1,6 +1,12 @@
 # VLM integration handoff
 
-This is the single canonical handoff for integrating the incoming image-enrichment work.
+> **Historical integration record.** The provider, normalization, cache,
+> resolution policy, controlled runner, and live experiment described as
+> incoming below have now been integrated on `prep-vlm-evaluation`. For the
+> current system, read [ARCHITECTURE.md](ARCHITECTURE.md); for the first live
+> results, read [VLM_EXPERIMENT_RESULTS.md](VLM_EXPERIMENT_RESULTS.md).
+
+This was the canonical handoff for integrating the image-enrichment work.
 It describes the state of `prep-vlm-evaluation` relative to `main`, the adapter boundary,
 known conflicts, and the validation order. It does not define a second provider architecture.
 
