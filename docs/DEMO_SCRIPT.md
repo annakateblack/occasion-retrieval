@@ -33,7 +33,7 @@ Call out the three boundaries:
 **Say:**
 “The main thing I wanted to avoid was comparing two different systems and then attributing the difference to vision. Both arms use the same inventory, event, weights, filters, threshold, and sorting. The enriched arm only changes previously unknown visual attributes.”
 
-Mention that the current test suite has 296 passing tests and the baseline path remains deterministic.
+Mention that the current test suite has 305 passing tests and the baseline path remains deterministic.
 
 ## 2:30–3:45 — Show the live result
 

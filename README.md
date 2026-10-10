@@ -7,7 +7,30 @@ deterministic ranker when listing captions omit most visual details?**
 
 The current system includes a caption-only baseline, live Anthropic vision
 enrichment behind a provider-neutral contract, provenance-aware merging, and a
-controlled evaluation harness. It has **296 passing tests**.
+controlled evaluation harness. It has **305 passing tests**.
+
+## In plain English
+
+Students at UGA rent formal dresses from student-run Instagram accounts. The
+listings are photos with free-text captions, so size, price, dates and style
+are never in the same place twice. This project reads my own Instagram data
+export, pulls the facts out of captions with tested rules, filters out dresses
+that can't work, and ranks the rest with scores you can trace. The experiment
+then lets a vision model fill in what captions leave out and reruns the same
+ranker to see whether the photos help.
+
+The first live run moved the two reachable good matches from rank 90 to 35 and
+from 89 to 44, but the top-10 score stayed at zero and only 7 of 157 dresses
+were enriched. That is directional evidence, not proof of a better system, and
+the write-up says so.
+
+## How this was built
+
+I built this with Claude (Anthropic), which wrote the code. I chose the
+question, set the constraints (no Instagram credentials, captions outrank the
+model on stated facts, unknown values stay unknown), ran it on my own data,
+caught bugs against my real listings, and decided what the results support.
+The commit history shows each step. Anna Kate Black, September 2026.
 
 ## What the system does
 
@@ -130,6 +153,8 @@ ties.
 |---|---|
 | [Architecture](docs/ARCHITECTURE.md) | Current components, data flow, and trust boundaries |
 | [First live results](docs/VLM_EXPERIMENT_RESULTS.md) | Results, limitations, and next experiment |
+| [Project brief](docs/PROJECT_BRIEF.md) | One-page summary of the question, result, and limits |
+| [Demo script](docs/DEMO_SCRIPT.md) | Five-minute walkthrough of the local demo (`scripts/demo_app.py`) |
 | [Evaluation plan](docs/VLM_EVALUATION_PLAN.md) | Controlled experiment and metric definitions |
 | [ADRs](docs/adr/) | Decisions, alternatives, and consequences |
 | [Decision register](docs/DECISIONS.md) | Locked, reversible, and pending choices |

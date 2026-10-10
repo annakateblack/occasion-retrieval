@@ -1,4 +1,4 @@
-# Professor brief: occasion retrieval from fragmented social-commerce inventory
+# Project brief: occasion retrieval from fragmented social-commerce inventory
 
 ## Project question
 
@@ -15,7 +15,7 @@ The project has four main layers:
 3. **Provider-neutral visual enrichment.** A live Anthropic vision provider extracts structured garment attributes behind a stable interface. Vision may fill only previously unknown visual fields above a confidence floor. Caption-derived transactional facts remain authoritative, and conflicts are recorded instead of silently overwritten.
 4. **Controlled evaluation.** Caption-only and enriched arms use the same inventory, event, ranker, weights, thresholds, filters, and sorting logic. The intended experimental difference is attribute observability.
 
-The repo currently has 296 passing tests.
+The repo currently has 305 passing tests.
 
 ## Why vision was necessary
 

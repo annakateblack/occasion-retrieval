@@ -181,7 +181,8 @@ def extract_prices(caption: str) -> tuple[list[PriceCandidate], str | None]:
                 anchored_kind.setdefault(absolute_start, (kind, f"anchored_{kind}"))
 
     for m in _MONEY.finditer(caption):
-        amount = m.group(1) or m.group(2)\n        cents = int(round(float(amount) * 100))
+        amount = m.group(1) or m.group(2)
+        cents = int(round(float(amount) * 100))
         start, end = m.start(), m.end()
 
         # Step 1 result wins outright when present.

@@ -21,7 +21,7 @@ Every source is reduced to a **file-based snapshot** and parsed by an **adapter*
 ```
   source (external)          snapshot (local file)        adapter              normalized
   ─────────────────          ─────────────────────        ───────              ──────────
-  Save-app profile    ──▶    data/local/taste_*.json──▶ TasteAdapter──▶  RawTasteItem
+  Save-app profile    ──▶    data/local/taste_*.json   ──▶ TasteAdapter    ──▶  RawTasteItem
   Instagram export    ──▶    data/local/saved_posts.json ─▶ IGExportAdapter ──▶ RawDressListing
   oEmbed resolution   ──▶    data/local/oembed_cache/   ──▶ IGOembedAdapter ──▶ RawDressListing
   manual / form       ──▶    data/local/manual.csv     ──▶ ManualAdapter   ──▶  RawDressListing
