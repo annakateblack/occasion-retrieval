@@ -29,7 +29,7 @@ the write-up says so.
 I built this with Claude (Anthropic), which wrote the code. I chose the
 question, set the constraints (no Instagram credentials, captions outrank the
 model on stated facts, unknown values stay unknown), ran it on my own data,
-caught bugs against my real listings, and decided what the results support.
+caught bugs against my real listings, and decided what the results support. I picked the 8 real listings used for evaluation; Claude assigned their relevance grades, so the labels are not my own independent judgment.
 The commit history shows each step. Anna Kate Black, September 2026.
 
 ## What the system does

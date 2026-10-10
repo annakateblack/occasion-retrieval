@@ -1,6 +1,6 @@
 {
   "name": "dress_visual_seed_v1",
-  "description": "Eight hand-labeled dresses used to ground and evaluate the visual extractor. Each carries human-stated expected attributes, so extractor output can be scored against a person rather than against itself. Two entries are deliberate near-misses: a system that ranks them highly is matching the occasion but not the wearer's stated construction preferences.",
+  "description": "Eight labeled dresses used to ground and evaluate the visual extractor. Each carries stated expected attributes, so extractor output can be scored against a fixed reference rather than against itself. Two entries are deliberate near-misses: a system that ranks them highly is matching the occasion but not the wearer's stated construction preferences.",
   "created_at": "2026-09-20",
   "is_synthetic": true,
   "_assumption": "PLACEHOLDER PERMALINKS. The eight real permalinks were never supplied in conversation, so these shortcodes are invented and resolve to nothing. Replace `permalink` and `shortcode` with the real ones and set is_synthetic=false. Until that flag is false, no metric computed against this set may be reported as measured.",

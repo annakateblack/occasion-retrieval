@@ -143,4 +143,4 @@ flat results, and distinguish provider feasibility from ranking effectiveness.
 
 The public result contains aggregate counts and metrics only. Images, captions,
 usernames, permalinks, shortcodes, row-level outputs, caches, credentials, and
-human labels remain in gitignored local storage.
+real labels remain in gitignored local storage.

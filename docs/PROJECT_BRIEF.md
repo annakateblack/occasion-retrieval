@@ -30,7 +30,7 @@ The live run processed 7 reachable anchor images.
 - 7/7 live enrichments succeeded.
 - The model filled 91.4% of requested visual-attribute slots across those seven processed listings.
 - Only 7 of 157 catalog candidates were enriched, so treatment coverage was 4.5%.
-- There were 3 positive My Tie anchors in the human label set; 2 were reachable by the dress-ranking pipeline.
+- There were 3 positive My Tie anchors in the label set; 2 were reachable by the dress-ranking pipeline. The 8 anchors are real listings I chose; their relevance grades were assigned by Claude, not by me.
 - Those two reachable positives moved from ranks 90 and 89 to ranks 35 and 44.
 - Across the 6 anchors comparable in both arms, 5 moved up, 1 moved down one place, and mean rank movement was +20.5 places.
 - nDCG@10 was 0.0000 in both arms because no labelled positive appeared in the top 10.
@@ -52,7 +52,7 @@ That distinction is important to the project. The system is designed to surface 
 
 ## Methodological safeguards
 
-- Real metrics are gated on both real human labels and a live provider.
+- Real metrics are gated on both real labels and a live provider. Here the labels cover real listings, but the grades are AI-assigned, which limits what the numbers can show.
 - Vision does not overwrite known caption values.
 - Size, price, availability, and stated dates remain outside vision authority.
 - Provider/model version and extraction-contract fingerprint are retained for provenance and cache identity.

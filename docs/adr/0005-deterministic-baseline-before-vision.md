@@ -48,7 +48,7 @@ The visual layer should be evaluated on at least these dimensions:
 
 1. **Attribute coverage:** increase observed colour, sleeve, neckline, silhouette, sparkle/texture, and fabric without inventing unsupported values.
 2. **Event discrimination:** reduce inappropriate top-10 overlap between intentionally different events such as My Tie and Christmas Cocktail.
-3. **Human-labelled relevance:** improve nDCG@10 on the local labelled query set.
+3. **Labelled relevance:** improve nDCG@10 on the local labelled query set.
 4. **Stability:** preserve hard-filter behavior and deterministic ranking when enriched attributes are held constant.
 5. **Auditability:** keep the model output structured, preserve uncertainty, and record which attributes came from vision rather than caption parsing.
 
